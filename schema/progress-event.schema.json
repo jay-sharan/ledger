@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ledger.local/schema/progress-event",
+  "title": "Ledger progress event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "at", "kind", "summary", "next"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable unique id, e.g. 2026-09-14T12-00-00Z-scaffold"
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "scaffold",
+        "approve",
+        "run",
+        "counterexample",
+        "converge",
+        "decision_link",
+        "note"
+      ]
+    },
+    "concern": {
+      "type": "string",
+      "description": "Optional short label for the unit or area of work"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "pins": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Home pins for the ledger-host repo (plan, branch, commit, …). Last event with pins replaces prior home pins entirely — restate the full set when updating."
+    },
+    "contexts": {
+      "type": "array",
+      "description": "Named semantic pin groups (apps, experiments, package sets). Merged by id across history; last definition of an id wins.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "pins"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]*$",
+            "description": "Stable context id, e.g. consumer | migration_exp | local_pkgs"
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1,
+            "description": "e.g. app | experiment | packages | path"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human label, e.g. traveller-portal"
+          },
+          "pins": {
+            "type": "object",
+            "additionalProperties": { "type": "string" },
+            "description": "String pin values only (no nested objects)"
+          }
+        }
+      }
+    },
+    "active": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9_-]*$"
+      },
+      "description": "Context ids in play for CURRENT Next. Last event that sets active wins; default [] if never set."
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": { "type": "string" },
+        "contractHash": { "type": "string" },
+        "matchedPrevious": { "type": "boolean" }
+      }
+    },
+    "next": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    }
+  }
+}

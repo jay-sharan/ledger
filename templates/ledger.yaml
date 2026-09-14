@@ -1,0 +1,5 @@
+name: {{name}}
+title: {{title}}
+# When true, agents may checkpoint without waiting for chat approval
+# when CURRENT Next names an auto-checkpoint unit.
+autoCheckpoint: false
