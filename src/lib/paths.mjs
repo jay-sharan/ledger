@@ -1,4 +1,11 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -36,6 +43,34 @@ export function findProjectRoot(start = process.cwd()) {
     }
     dir = parent;
   }
+}
+
+export function projectTemplatesDir(projectRoot) {
+  return join(projectRoot, ".ledger", "templates");
+}
+
+/**
+ * Copy package templates into `.ledger/templates/` once per project.
+ * Never overwrites existing files so local edits stick.
+ * @returns {{ dir: string, copied: string[], skipped: string[] }}
+ */
+export function ensureProjectTemplates(projectRoot) {
+  const destDir = projectTemplatesDir(projectRoot);
+  mkdirSync(destDir, { recursive: true });
+  const copied = [];
+  const skipped = [];
+  for (const name of readdirSync(TEMPLATES_DIR)) {
+    const src = join(TEMPLATES_DIR, name);
+    if (!statSync(src).isFile()) continue;
+    const dest = join(destDir, name);
+    if (existsSync(dest)) {
+      skipped.push(name);
+      continue;
+    }
+    copyFileSync(src, dest);
+    copied.push(name);
+  }
+  return { dir: destDir, copied, skipped };
 }
 
 export function ledgerRoot(projectRoot, name) {

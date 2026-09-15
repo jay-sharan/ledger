@@ -7,6 +7,7 @@ Usage:
 Commands:
   init <name> [--title TEXT] [--branch NAME]
       Create .ledger/<name>/ with plan, CURRENT, events, decisions, base prompt.
+      Also seeds .ledger/templates/ once per project (does not overwrite).
 
   list
       List ledgers in this project.
@@ -40,6 +41,9 @@ Event kinds:
 Local install (until published):
   cd /path/to/ledger && npm link
   # or: alias ledger="node /path/to/ledger/bin/ledger.mjs"
+
+Global install (npm):
+  npm install -g @j1514/ledger
 
 See README.md for workflow and handoff formats.
 `);

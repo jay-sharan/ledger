@@ -5,6 +5,7 @@ import {
 } from "node:fs";
 import {
   assertValidName,
+  ensureProjectTemplates,
   fillTemplate,
   findProjectRoot,
   flagValue,
@@ -44,6 +45,8 @@ export async function initCmd(argv) {
     branch = tryGit(projectRoot, ["branch", "--show-current"]) ?? "main";
   }
 
+  const shared = ensureProjectTemplates(projectRoot);
+
   mkdirSync(paths.events, { recursive: true });
   mkdirSync(paths.decisions, { recursive: true });
 
@@ -78,8 +81,12 @@ export async function initCmd(argv) {
       plan: paths.planRel,
       branch,
     },
-    artifacts: [paths.planRel, `.ledger/${name}/base-prompt.md`],
-    next: "Edit plan.md units, then implement the first unit (commit before next)",
+    artifacts: [
+      paths.planRel,
+      `.ledger/${name}/base-prompt.md`,
+      ".ledger/templates/",
+    ],
+    next: "Author plan.md to ledger-implementation-plan/v1, then run U001 (commit before next)",
   };
 
   const eventPath = `${paths.events}/${eventId}.json`;
@@ -94,8 +101,20 @@ export async function initCmd(argv) {
   });
 
   console.log(`Created ledger "${name}" at ${paths.root}`);
-  console.log(`Plan:     ${paths.planRel}`);
-  console.log(`CURRENT:  .ledger/${name}/CURRENT.md`);
-  console.log(`Prompt:   ledger prompt ${name}`);
-  console.log(`Next:     edit the plan, then work CURRENT Next`);
+  console.log(`Plan:      ${paths.planRel}`);
+  console.log(`CURRENT:   .ledger/${name}/CURRENT.md`);
+  console.log(`Prompt:    ledger prompt ${name}`);
+  if (shared.copied.length) {
+    console.log(
+      `Templates: .ledger/templates/ (copied: ${shared.copied.join(", ")})`,
+    );
+  } else {
+    console.log(
+      `Templates: .ledger/templates/ (already present; not overwritten)`,
+    );
+  }
+  console.log(
+    `Author with: .ledger/templates/plan-author-prompt.md + implementation-plan.md`,
+  );
+  console.log(`Next:      edit the plan, then work CURRENT Next`);
 }

@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ledger.local/schema/implementation-plan",
+  "title": "Ledger implementation plan (v1)",
+  "description": "Machine-facing shape for ledger-implementation-plan/v1. Markdown plan.md is the source of truth agents edit; this schema documents the contract for optional tooling.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "ledger",
+    "goal",
+    "success",
+    "outOfScope",
+    "phases",
+    "units",
+    "firstNext",
+    "openQuestions"
+  ],
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "ledger-implementation-plan/v1"
+    },
+    "ledger": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$",
+      "description": "Feat / ledger name"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "goal": { "type": "string", "minLength": 1 },
+    "success": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "outOfScope": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "pinsSketch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "home": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "contexts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "kind"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "kind": { "type": "string", "minLength": 1 },
+              "label": { "type": "string" },
+              "pins": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              }
+            }
+          }
+        },
+        "active": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "outcome"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^P[0-9]+$"
+          },
+          "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "outcome": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "what",
+          "phase",
+          "why",
+          "runner",
+          "do",
+          "doneWhen"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^U[0-9]{3,}$"
+          },
+          "what": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "phase": {
+            "type": "string",
+            "pattern": "^P[0-9]+$"
+          },
+          "why": { "type": "string", "minLength": 1, "maxLength": 140 },
+          "runner": { "type": "string", "enum": ["agent", "user"] },
+          "commit": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Conventional commit subject hint"
+          },
+          "artifacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "do": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "doneWhen": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "firstNext": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280,
+      "description": "Must name the first unit id, e.g. U001 — …"
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
