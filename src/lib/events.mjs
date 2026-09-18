@@ -140,6 +140,7 @@ export function regenerateCurrent({ paths, meta, events }) {
     ledger: meta.name,
     title: meta.title ?? meta.name,
     plan: meta.planRel,
+    autopilot: meta.autopilot === true ? "true" : "false",
     ...pins,
   };
 

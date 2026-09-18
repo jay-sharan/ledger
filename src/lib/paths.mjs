@@ -5,6 +5,7 @@ import {
   readdirSync,
   readFileSync,
   statSync,
+  writeFileSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -134,6 +135,27 @@ export function readLedgerYaml(yamlPath) {
     out[m[1]] = value;
   }
   return out;
+}
+
+/**
+ * Set a top-level scalar in ledger.yaml (preserves other lines/comments).
+ * Appends the key when missing.
+ */
+export function setLedgerYamlValue(yamlPath, key, value) {
+  if (!/^[A-Za-z0-9_]+$/.test(key)) {
+    throw new Error(`Invalid yaml key: ${key}`);
+  }
+  const rendered =
+    typeof value === "boolean" ? (value ? "true" : "false") : String(value);
+  let raw = existsSync(yamlPath) ? readFileSync(yamlPath, "utf8") : "";
+  const re = new RegExp(`^${key}:\\s*.*$`, "m");
+  if (re.test(raw)) {
+    raw = raw.replace(re, `${key}: ${rendered}`);
+  } else {
+    raw = `${raw.trimEnd()}${raw.trimEnd() ? "\n" : ""}${key}: ${rendered}\n`;
+  }
+  if (!raw.endsWith("\n")) raw += "\n";
+  writeFileSync(yamlPath, raw, "utf8");
 }
 
 export function readTemplate(name) {

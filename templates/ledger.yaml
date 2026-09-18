@@ -1,5 +1,8 @@
 name: {{name}}
 title: {{title}}
-# When true, agents may checkpoint without waiting for chat approval
+# When true, agents continue Next units, checkpoint without waiting, and
+# take recommended decisions (documented). Stop on user-run Next or assert fail.
+autopilot: false
+# When true (or when autopilot is on), agents may checkpoint without chat approval
 # when CURRENT Next names an auto-checkpoint unit.
 autoCheckpoint: false

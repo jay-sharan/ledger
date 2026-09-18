@@ -19,6 +19,8 @@ A personal progress tool. In a git project you can keep several ledgers (one per
 
 Home `pins` (plan / branch / commit) belong to the ledger-host repo. Named `contexts` track other apps or packages; `active` lists which contexts matter for the current Next.
 
+**Autopilot** (optional): when on, the agent continues Next units from the plan, checkpoints without waiting, takes recommended decisions and documents them, and finishes with a short summary of decisions and deviations.
+
 ## How it works
 
 1. Install the CLI, then run `ledger init <feat>` inside a project.
@@ -27,6 +29,7 @@ Home `pins` (plan / branch / commit) belong to the ledger-host repo. Named `cont
 4. Do the unit named by **Next** in `CURRENT.md`.
 5. Commit the code, then record progress with `ledger checkpoint`.
 6. Use `ledger assert <feat> --match-pin` before the next unit so the tree is clean and matches the home commit pin.
+7. Optional: `ledger autopilot <feat> on` so the agent keeps going through the plan.
 
 ```bash
 npm install -g @j1514/ledger
@@ -34,23 +37,22 @@ ledger init my-feature --title "My feature" --branch feat/my-feature
 ledger prompt my-feature
 ```
 
+Requires Node 20+. Source: [github.com/jay-sharan/ledger](https://github.com/jay-sharan/ledger).
+
 ## Commands
 
-
-| Command                                        | What it does                                                            |
-| ---------------------------------------------- | ----------------------------------------------------------------------- |
-| `ledger init <name> [--title T] [--branch B]`  | Create `.ledger/<name>/` and seed `.ledger/templates/` once             |
-| `ledger list`                                  | List ledgers in this project                                            |
-| `ledger status [name]`                         | Show Next, home pins, contexts, and active                              |
-| `ledger prompt <name> [--no-copy]`             | Print the base prompt (copies to clipboard when possible)               |
-| `ledger checkpoint <name> --file <event.json>` | Append a progress event and regenerate CURRENT                          |
-| `ledger checkpoint <name> --stdin`             | Checkpoint from stdin                                                   |
-| `ledger checkpoint <name> --regen`             | Regenerate CURRENT from the existing log                                |
-| `ledger assert <name> [--match-pin]`           | Require a clean tree; with `--match-pin`, also match home `pins.commit` |
-| `ledger help`                                  | Show help                                                               |
-
-
-
+| Command | What it does |
+| --- | --- |
+| `ledger init <name> [--title T] [--branch B]` | Create `.ledger/<name>/` and seed `.ledger/templates/` once |
+| `ledger list` | List ledgers in this project |
+| `ledger status [name]` | Show Next, home pins, contexts, active, and autopilot |
+| `ledger prompt <name> [--no-copy]` | Print the base prompt (copies to clipboard when possible) |
+| `ledger checkpoint <name> --file <event.json>` | Append a progress event and regenerate CURRENT |
+| `ledger checkpoint <name> --stdin` | Checkpoint from stdin |
+| `ledger checkpoint <name> --regen` | Regenerate CURRENT from the existing log |
+| `ledger assert <name> [--match-pin]` | Require a clean tree; with `--match-pin`, also match home `pins.commit` |
+| `ledger autopilot <name> [on\|off]` | Show or set autopilot for a ledger |
+| `ledger help` | Show help |
 
 ## License
 

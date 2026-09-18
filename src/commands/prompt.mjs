@@ -74,7 +74,8 @@ CURRENT Next: ${next}
 Plan: ${paths.planRel}
 CURRENT: .ledger/${name}/CURRENT.md
 ${formatActiveFooter(contexts, active)}
-autoCheckpoint: ${cfg.autoCheckpoint === true ? "true" : "false"}
+autopilot: ${cfg.autopilot === true ? "true" : "false"}
+autoCheckpoint: ${cfg.autoCheckpoint === true || cfg.autopilot === true ? "true" : "false"}
 `;
 
   const text = `${body}${footer}\n`;

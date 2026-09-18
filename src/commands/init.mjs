@@ -96,7 +96,7 @@ export async function initCmd(argv) {
   const events = readEvents(paths.jsonl);
   regenerateCurrent({
     paths,
-    meta: { name, title, planRel: paths.planRel },
+    meta: { name, title, planRel: paths.planRel, autopilot: false },
     events,
   });
 

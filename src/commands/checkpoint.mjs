@@ -66,6 +66,7 @@ export async function checkpointCmd(argv) {
       name,
       title: cfg.title ?? name,
       planRel: paths.planRel,
+      autopilot: cfg.autopilot === true,
     },
     events,
   });

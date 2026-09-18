@@ -1,4 +1,5 @@
 import { assertCmd } from "./commands/assert.mjs";
+import { autopilotCmd } from "./commands/autopilot.mjs";
 import { checkpointCmd } from "./commands/checkpoint.mjs";
 import { helpCmd } from "./commands/help.mjs";
 import { initCmd } from "./commands/init.mjs";
@@ -13,6 +14,7 @@ const COMMANDS = {
   prompt: promptCmd,
   checkpoint: checkpointCmd,
   assert: assertCmd,
+  autopilot: autopilotCmd,
   help: helpCmd,
   "--help": helpCmd,
   "-h": helpCmd,

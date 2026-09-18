@@ -29,6 +29,11 @@ Commands:
       HEAD to contain the ledger home pins.commit value (ledger-host repo only).
       Subject/package commits in contexts are informational — not asserted.
 
+  autopilot <name> [on|off]
+      Show or set autopilot for a ledger. When on, agents continue the plan,
+      checkpoint without waiting, take recommended decisions (documented),
+      and end with a short summary.
+
   help
       Show this message.
 

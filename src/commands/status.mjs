@@ -23,6 +23,7 @@ function printStatus(projectRoot, name) {
   console.log(`ledger:  ${name}`);
   console.log(`title:   ${cfg.title ?? name}`);
   console.log(`plan:    ${paths.planRel}`);
+  console.log(`autopilot: ${cfg.autopilot === true ? "on" : "off"}`);
   console.log(`events:  ${events.length}`);
   console.log(`updated: ${last?.at ?? "never"}`);
   console.log(`kind:    ${last?.kind ?? "—"}`);

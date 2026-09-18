@@ -12,4 +12,10 @@ Branch: {{branch}}
    Do not ask me to checkpoint and run a script in the same breath without order.
 8. Plan changes: decision note + my approval + decision_link checkpoint.
 
-Exception: if CURRENT Next names an auto-checkpoint unit, checkpoint without waiting.
+Autopilot (when footer / CURRENT metadata says autopilot: true):
+- Continue Next units without waiting for approval; checkpoint after each committed unit.
+- On a decision, take the recommended approach, write `decisions/…` + `decision_link` checkpoint, continue.
+- Stop when Next is a user-run, assert fails, or the plan has no further unit.
+- End the run with a short summary: decisions taken, deviations from the plan, and current Next.
+
+Exception: if CURRENT Next names an auto-checkpoint unit, or autopilot is on, checkpoint without waiting.
