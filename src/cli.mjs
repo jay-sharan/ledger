@@ -6,6 +6,7 @@ import { initCmd } from "./commands/init.mjs";
 import { listCmd } from "./commands/list.mjs";
 import { promptCmd } from "./commands/prompt.mjs";
 import { statusCmd } from "./commands/status.mjs";
+import { versionCmd } from "./commands/version.mjs";
 
 const COMMANDS = {
   init: initCmd,
@@ -15,6 +16,10 @@ const COMMANDS = {
   checkpoint: checkpointCmd,
   assert: assertCmd,
   autopilot: autopilotCmd,
+  version: versionCmd,
+  "--version": versionCmd,
+  "-v": versionCmd,
+  "-V": versionCmd,
   help: helpCmd,
   "--help": helpCmd,
   "-h": helpCmd,

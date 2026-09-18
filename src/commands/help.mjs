@@ -34,6 +34,9 @@ Commands:
       checkpoint without waiting, take recommended decisions (documented),
       and end with a short summary.
 
+  version | -v | --version
+      Print the installed CLI version.
+
   help
       Show this message.
 

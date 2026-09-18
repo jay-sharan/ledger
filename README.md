@@ -52,6 +52,7 @@ Requires Node 20+. Source: [github.com/jay-sharan/ledger](https://github.com/jay
 | `ledger checkpoint <name> --regen` | Regenerate CURRENT from the existing log |
 | `ledger assert <name> [--match-pin]` | Require a clean tree; with `--match-pin`, also match home `pins.commit` |
 | `ledger autopilot <name> [on\|off]` | Show or set autopilot for a ledger |
+| `ledger version` | Print the CLI version |
 | `ledger help` | Show help |
 
 ## License
