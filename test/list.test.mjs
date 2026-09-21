@@ -29,6 +29,13 @@ describe("ledger list", () => {
       "name: beta\ntitle: Beta Work\nautopilot: false\n",
       "utf8",
     );
+    // Shared starters folder also has a ledger.yaml template — must not list as a ledger
+    mkdirSync(join(dir, ".ledger", "templates"), { recursive: true });
+    writeFileSync(
+      join(dir, ".ledger", "templates", "ledger.yaml"),
+      "name: {{name}}\ntitle: {{title}}\n",
+      "utf8",
+    );
     writeFileSync(join(dir, ".ledger", "alpha", "progress.jsonl"), "", "utf8");
     writeFileSync(join(dir, ".ledger", "beta", "progress.jsonl"), "", "utf8");
 
@@ -40,5 +47,6 @@ describe("ledger list", () => {
     assert.match(r.stdout, /NAME\s+TITLE/);
     assert.match(r.stdout, /alpha\s+Alpha Feature/);
     assert.match(r.stdout, /beta\s+Beta Work/);
+    assert.doesNotMatch(r.stdout, /templates/);
   });
 });

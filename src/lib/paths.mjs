@@ -99,6 +99,7 @@ export function listLedgers(projectRoot) {
   return readdirSync(base, { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
+    .filter((name) => name !== "templates")
     .filter((name) => existsSync(join(base, name, "ledger.yaml")))
     .sort();
 }
