@@ -44,7 +44,7 @@ Requires Node 20+. Source: [github.com/jay-sharan/ledger](https://github.com/jay
 | Command | What it does |
 | --- | --- |
 | `ledger init <name> [--title T] [--branch B]` | Create `.ledger/<name>/` and seed `.ledger/templates/` once |
-| `ledger list` | List ledgers in this project |
+| `ledger list` | List ledgers (name and title) |
 | `ledger status [name]` | Show Next, home pins, contexts, active, and autopilot |
 | `ledger prompt <name> [--no-copy]` | Print the base prompt (copies to clipboard when possible) |
 | `ledger checkpoint <name> --file <event.json>` | Append a progress event and regenerate CURRENT |
