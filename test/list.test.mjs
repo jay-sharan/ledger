@@ -36,7 +36,18 @@ describe("ledger list", () => {
       "name: {{name}}\ntitle: {{title}}\n",
       "utf8",
     );
-    writeFileSync(join(dir, ".ledger", "alpha", "progress.jsonl"), "", "utf8");
+    writeFileSync(
+      join(dir, ".ledger", "alpha", "progress.jsonl"),
+      `${JSON.stringify({
+        id: "e1",
+        at: "2026-09-14T12:00:00Z",
+        kind: "run",
+        concern: "U001",
+        summary: "did stuff",
+        next: "run U002 (commit before next)",
+      })}\n`,
+      "utf8",
+    );
     writeFileSync(join(dir, ".ledger", "beta", "progress.jsonl"), "", "utf8");
 
     const r = spawnSync(process.execPath, [bin, "list"], {
@@ -44,9 +55,9 @@ describe("ledger list", () => {
       encoding: "utf8",
     });
     assert.equal(r.status, 0, r.stderr);
-    assert.match(r.stdout, /NAME\s+TITLE/);
-    assert.match(r.stdout, /alpha\s+Alpha Feature/);
-    assert.match(r.stdout, /beta\s+Beta Work/);
+    assert.match(r.stdout, /NAME\s+CURRENT\s+NEXT\s+TITLE/);
+    assert.match(r.stdout, /alpha\s+U001\s+U002\s+Alpha Feature/);
+    assert.match(r.stdout, /beta\s+Done\s+Beta Work/);
     assert.doesNotMatch(r.stdout, /templates/);
   });
 });

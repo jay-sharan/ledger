@@ -10,7 +10,8 @@ Commands:
       Also seeds .ledger/templates/ once per project (does not overwrite).
 
   list
-      List ledgers in this project (name and title).
+      List ledgers in this project (name, current unit, next unit, title).
+      Shows Done when Next names no unit.
 
   status [name]
       Show metadata + Next. With no name, list all ledgers briefly.

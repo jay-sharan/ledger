@@ -99,6 +99,19 @@ export function lastOfKind(events, kind) {
   return null;
 }
 
+const UNIT_ID_RE = /\bU\d{3,}\b/;
+
+/**
+ * Unit id referenced by the last event's `next` field.
+ * Returns null when no unit id is referenced (treated as done).
+ */
+export function nextUnit(events) {
+  const last = events[events.length - 1];
+  if (!last?.next) return null;
+  const match = last.next.match(UNIT_ID_RE);
+  return match ? match[0] : null;
+}
+
 export function jsonlHash(jsonlPath) {
   const raw = existsSync(jsonlPath) ? readFileSync(jsonlPath, "utf8") : "";
   return createHash("sha256").update(raw).digest("hex").slice(0, 12);
