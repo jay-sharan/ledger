@@ -11,9 +11,11 @@ Commands:
 
   list [-g|--global] [--up N] [--json]
       List ledgers in this project (name, current unit, next unit, title).
-      Shows Done when Next names no unit.
+      Shows Done when Next names no unit. Sorted active first, then by
+      last update (newest first); Done rows are dimmed on a TTY.
       With -g, go N levels above the project root (default 1) and list
-      ledgers in every git repo found up to N levels below it.
+      ledgers in every git repo found up to N levels below it. Outside a
+      repo, scans the current folder instead.
       With --json, print rows with absolute file paths (for agents).
 
   status [name]

@@ -56,9 +56,11 @@ describe("ledger list", () => {
       encoding: "utf8",
     });
     assert.equal(r.status, 0, r.stderr);
-    assert.match(r.stdout, /NAME\s+CURRENT\s+NEXT\s+TITLE/);
-    assert.match(r.stdout, /alpha\s+U001\s+U002\s+Alpha Feature/);
-    assert.match(r.stdout, /beta\s+Done\s+Beta Work/);
+    assert.match(r.stdout, /NAME\s+CURRENT\s+NEXT\s+UPDATED\s+TITLE/);
+    assert.match(r.stdout, /alpha\s+U001\s+U002\s+\S+ ago\s+Alpha Feature/);
+    assert.match(r.stdout, /beta\s+Done\s+just now\s+Beta Work/);
+    assert.ok(r.stdout.indexOf("alpha") < r.stdout.indexOf("beta"));
+    assert.match(r.stdout, /2 ledgers · 1 active · 1 done/);
     assert.doesNotMatch(r.stdout, /templates/);
   });
 
@@ -83,9 +85,9 @@ describe("ledger list", () => {
       encoding: "utf8",
     });
     assert.equal(r.status, 0, r.stderr);
-    assert.match(r.stdout, /REPO\s+NAME\s+CURRENT\s+NEXT\s+TITLE/);
-    assert.match(r.stdout, /api\s+auth\s+Done\s+auth work/);
-    assert.match(r.stdout, /web\s+checkout\s+Done\s+checkout work/);
+    assert.match(r.stdout, /REPO\s+NAME\s+CURRENT\s+NEXT\s+UPDATED\s+TITLE/);
+    assert.match(r.stdout, /api\s+auth\s+Done\s+just now\s+auth work/);
+    assert.match(r.stdout, /web\s+checkout\s+Done\s+just now\s+checkout work/);
     assert.doesNotMatch(r.stdout, /no-ledger/);
 
     const j = spawnSync(process.execPath, [bin, "list", "-g", "--json"], {
@@ -93,7 +95,7 @@ describe("ledger list", () => {
       encoding: "utf8",
     });
     assert.equal(j.status, 0, j.stderr);
-    const rows = JSON.parse(j.stdout);
+    const rows = JSON.parse(j.stdout).sort((a, b) => a.repo.localeCompare(b.repo));
     assert.deepEqual(
       rows.map((row) => [row.repo, row.name]),
       [
@@ -105,5 +107,13 @@ describe("ledger list", () => {
       rows[0].paths.plan,
       join(realpathSync(ws), "api", ".ledger", "auth", "plan.md"),
     );
+
+    const fromWs = spawnSync(process.execPath, [bin, "list", "-g"], {
+      cwd: ws,
+      encoding: "utf8",
+    });
+    assert.equal(fromWs.status, 0, fromWs.stderr);
+    assert.match(fromWs.stdout, /api\s+auth/);
+    assert.match(fromWs.stdout, /web\s+checkout/);
   });
 });
