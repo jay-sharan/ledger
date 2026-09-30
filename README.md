@@ -45,6 +45,8 @@ Requires Node 20+. Source: [github.com/jay-sharan/ledger](https://github.com/jay
 | --- | --- |
 | `ledger init <name> [--title T] [--branch B]` | Create `.ledger/<name>/` and seed `.ledger/templates/` once |
 | `ledger list` | List ledgers with current unit, next unit (or Done), and title |
+| `ledger list -g [--up N]` | List ledgers across all git repos N levels up (default 1) |
+| `ledger list [-g] --json` | Same rows as JSON with absolute paths to plan, CURRENT, decisions, progress |
 | `ledger status [name]` | Show Next, home pins, contexts, active, and autopilot |
 | `ledger prompt <name> [--no-copy]` | Print the base prompt (copies to clipboard when possible) |
 | `ledger checkpoint <name> --file <event.json>` | Append a progress event and regenerate CURRENT |

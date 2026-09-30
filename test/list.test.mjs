@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   mkdirSync,
   mkdtempSync,
+  realpathSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -59,5 +60,50 @@ describe("ledger list", () => {
     assert.match(r.stdout, /alpha\s+U001\s+U002\s+Alpha Feature/);
     assert.match(r.stdout, /beta\s+Done\s+Beta Work/);
     assert.doesNotMatch(r.stdout, /templates/);
+  });
+
+  it("-g lists ledgers across sibling git repos", () => {
+    const ws = mkdtempSync(join(tmpdir(), "ledger-list-g-"));
+    for (const [repo, name] of [
+      ["api", "auth"],
+      ["web", "checkout"],
+    ]) {
+      mkdirSync(join(ws, repo, ".git"), { recursive: true });
+      mkdirSync(join(ws, repo, ".ledger", name), { recursive: true });
+      writeFileSync(
+        join(ws, repo, ".ledger", name, "ledger.yaml"),
+        `name: ${name}\ntitle: ${name} work\n`,
+        "utf8",
+      );
+    }
+    mkdirSync(join(ws, "no-ledger", ".git"), { recursive: true });
+
+    const r = spawnSync(process.execPath, [bin, "list", "-g"], {
+      cwd: join(ws, "api"),
+      encoding: "utf8",
+    });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stdout, /REPO\s+NAME\s+CURRENT\s+NEXT\s+TITLE/);
+    assert.match(r.stdout, /api\s+auth\s+Done\s+auth work/);
+    assert.match(r.stdout, /web\s+checkout\s+Done\s+checkout work/);
+    assert.doesNotMatch(r.stdout, /no-ledger/);
+
+    const j = spawnSync(process.execPath, [bin, "list", "-g", "--json"], {
+      cwd: join(ws, "api"),
+      encoding: "utf8",
+    });
+    assert.equal(j.status, 0, j.stderr);
+    const rows = JSON.parse(j.stdout);
+    assert.deepEqual(
+      rows.map((row) => [row.repo, row.name]),
+      [
+        ["api", "auth"],
+        ["web", "checkout"],
+      ],
+    );
+    assert.equal(
+      rows[0].paths.plan,
+      join(realpathSync(ws), "api", ".ledger", "auth", "plan.md"),
+    );
   });
 });

@@ -9,9 +9,12 @@ Commands:
       Create .ledger/<name>/ with plan, CURRENT, events, decisions, base prompt.
       Also seeds .ledger/templates/ once per project (does not overwrite).
 
-  list
+  list [-g|--global] [--up N] [--json]
       List ledgers in this project (name, current unit, next unit, title).
       Shows Done when Next names no unit.
+      With -g, go N levels above the project root (default 1) and list
+      ledgers in every git repo found up to N levels below it.
+      With --json, print rows with absolute file paths (for agents).
 
   status [name]
       Show metadata + Next. With no name, list all ledgers briefly.
